@@ -620,7 +620,6 @@ pOper = ['?']       #Pila de operadores
 pilaOper = ['?']    #Pila de operandos
 pTipo = ['?']       #Pila de tipos
 
-
 #Precedencia
 precedence = (
     ( 'left', 'PLUS', 'MINUS' ),
