@@ -5,7 +5,7 @@ import ply.yacc as yacc
 import sys
 import re
 
-errorSem = False #No se imprime aceptado en caso de algún error
+errorSem = False 
 
 #Inicio Lexer
 
@@ -113,7 +113,7 @@ def t_error(t):
 lexer = lex.lex()
 #Fin del lexer
 
-#Inicio Cubo Semántico
+#Inicio Cubo Semantico
 cuboSem = {
            '=':{'int':{
                           'int':'int',
@@ -612,7 +612,7 @@ cuboSem = {
 
            }
            }
-#Fin Cubo Semántico
+#Fin Cubo Semantico
 
 #Pilas
 pOper = ['?']       #Pila de operadores
@@ -645,7 +645,8 @@ def p_PROGRAM(p):
     dirFunc.update(p[5])
   
 def p_PROG(p):
-
+  print(test)
+  
 def p_GLOBVAR(p):
   global dirFunc
   
@@ -787,3 +788,51 @@ def p_PARAMETERS(p):
 
 def p_FUNCTYPE(p):
     p[0] = p[1]
+
+def p_RETURN(p):
+  print('test')
+
+def p_BLOCK(p):
+    print('test')
+
+def p_ASSIGNATION(p):
+  global cuboSem
+  global dirFunc
+
+  varType = None
+  if p[2] == "-":
+    if(p[1] in dirFunc[currentScope]['tableVar'].keys()):
+      varType = dirFunc[currentScope]['tableVar'][p[1]]['type']
+    elif(p[1] in dirFunc['global']['tableVar'].keys()):
+      varType = dirFunc['global']['tableVar'][p[1]]['type']
+    else:
+      print("Variable not defined")
+    
+    assign = pilaOper.pop()
+    assignType = pTipo.pop()
+
+    if (cuboSem['='][varType][assignType] != 'error'):
+      #print (cuboSem['='][varType][assignType])
+      pass
+    else:
+      print("Assignment error")
+  else:
+    pass 
+
+def p_CONDITION(p):
+  print('test')
+
+def p_ELSE(p):
+  print('test')
+
+def p_LOOP(p):
+  print('test')
+
+def p_WHILE(p):
+  print('test')
+
+def p_FOR(p):
+  print('test')
+
+
+#print('prueba')
