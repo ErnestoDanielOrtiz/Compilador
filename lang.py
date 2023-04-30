@@ -60,7 +60,6 @@ tokens=[
 "OR",
 "DLR"] + list(reserved.values())
 
-
 #Ints
 def t_CTE_INT(t):
     r"[0-9]+"
@@ -626,3 +625,92 @@ precedence = (
     ( 'left', 'MUL', 'DIV' ),
     ( 'nonassoc', 'GT', 'LT','AND','OR' ),
 )
+
+#Funciones
+dirFunc = {}
+
+#Scope actual
+currentScope = None
+
+#Parametro evaluado
+funcAllCurr = None
+
+#Sintaxis
+def p_PROGRAM(p):
+
+  global dirFunc
+
+  #Actualiza el directorio de funciones
+  if(p[5] != None):
+    dirFunc.update(p[5])
+  
+def p_PROG(p):
+
+def p_GLOBVAR(p):
+  global dirFunc
+  
+  #Numero de variables 
+  nInt = 0
+  nFloat = 0
+  nChar = 0
+  nBool = 0
+
+  dirFunc['global'] = {'type': 'void', 'parameters': None, 'tableVar': p[1], 'variables': {'int': nInt, 'float': nFloat, 'char': nChar, 'bool': nBool}}
+
+def p_STATEMENTS(p):
+  if (p[1] == None):
+    p[0] = None
+  else:
+    tableVar = {}
+    tableVar.update(p[1])
+
+    if(p[2] != None):
+      checkexistance = p[1].keys()
+      for k in checkexistance:
+        if(k in p[2].keys()):
+          print("Variables with 1 or more definitions")
+        tableVar.update(p[2])
+
+      p[0] = tableVar
+
+def p_STATEMENT(p):
+  p[0] = p[1]
+
+def p_VAR(p):
+  
+  global currentScope
+  global dirFunc
+
+  #Numero de variables 
+  nInt = 0
+  nFloat = 0
+  nChar = 0
+  nBool = 0
+
+  currentScope = 'main'
+
+  #Global scope
+
+  dirFunc['main'] = {'type': 'void', 'parameters': None, 'tableVar': p[1], 'variables': {'int': nInt, 'float': nFloat, 'char': nChar, 'bool': nBool}}
+
+  p[0] = p[2]
+
+def p_ARRDECL(p):
+  sizeArr = 0
+  array = {p[2]: {'type': p[1]}}
+  array[p[2]].update(p[3])
+
+def p_DIMONE(p):
+  if(p[2] < 0):
+    print("Invalid array length")
+
+def p_DIMTWO(p):
+  if(p[1] == None):
+    p[0] = None
+  else:
+    if (p[2] < 0):
+      print("Invalid array length")
+
+def p_TYPE(p):
+  p[0] = p[1]
+  
