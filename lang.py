@@ -714,3 +714,76 @@ def p_DIMTWO(p):
 def p_TYPE(p):
   p[0] = p[1]
   
+def p_FUNCDIR(p):
+  if(p[1] == None):
+    p[0] = p[1]
+  else:
+    functions = {}
+    functions.update(p[1])
+    if(p[2] != None):
+      for f in p[1].keys():
+        if f in p[2].keys():
+          print("Function has 1 or more definitions")
+      functions.update(p[2])
+    p[0] = functions
+
+def p_FUNCDECL(p):
+  p[0] = p[1]
+
+def p_FUNCTION(p):
+  global dirFunc
+  global currentScope
+
+  funcInput = {p[p3]: {'type': p[2], 'parameters': {}, 'start': p[1]}}
+  currentScope = p[3]
+  dirFunc.update({p[3]: {'type': p[2]}, 'parameters': {}})
+
+  tableVarLocal = {}
+
+  #Revisa si entran parametros y los agrega a la tabla de variables local
+  if(p[5] != None):
+    aux = {}
+    aux.update(p[5])
+    aux.update(tableVarLocal)
+    tableVarLocal = aux
+    funcInput[p[3]].update({'tableVar': tableVarLocal})
+    funcInput[p[3]].update({'parameters': p[5]})
+  
+  dirFunc.update(funcInput)
+
+  #Revisa que no se dupliquen los parametros no se declaren dentro de la funcion
+  if(p[8] != None):
+    for v in tableVar.keys():
+      if(v in p[8].keys()):
+        print("Variable already defined")
+    tableVarLocal.update(p[8])
+
+  funcInput[p[3]].update({'tableVar' : tableVarLocal})
+  dirFunc.update(funcInput)
+  p[0] = funcInput
+
+  def p_FUNCPAR(p):
+    p[0] = p[1]
+
+  def p_PAR(p):
+    funcPar = {p[2]: {'type': p[1]}}
+
+    #Revisa si el parametro es un arreglo
+    if(p[3] != None): 
+      funcPar[p[2]].update(p[3])
+
+    if(p[4] != None):
+      if(p[2] in p[4].keys()):
+        print("Variable already defined")
+      else:
+        funcPar.update(p[4])
+    p[0] = funcPar
+
+  def p_PARAMETERS(p):
+    if(p[1] != None):
+      p[0] = p[2]
+    else:
+      p[0] = p[1]
+
+  def p_FUNCTYPE(p):
+    p[0] = p[1]

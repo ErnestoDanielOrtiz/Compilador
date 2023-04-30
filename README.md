@@ -11,3 +11,4 @@ Se agregó el cubo semántico, así como la presedencia de operadores y las pila
 
 Avance 3
 Se agregó al parser las funciones para declaraciones de variables y arreglos, y se está empezando a implementar la tabla de variables
+Se agregaron las funciones de funciones y sus parametros
