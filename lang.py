@@ -762,10 +762,10 @@ def p_FUNCTION(p):
   dirFunc.update(funcInput)
   p[0] = funcInput
 
-  def p_FUNCPAR(p):
+def p_FUNCPAR(p):
     p[0] = p[1]
 
-  def p_PAR(p):
+def p_PAR(p):
     funcPar = {p[2]: {'type': p[1]}}
 
     #Revisa si el parametro es un arreglo
@@ -779,11 +779,11 @@ def p_FUNCTION(p):
         funcPar.update(p[4])
     p[0] = funcPar
 
-  def p_PARAMETERS(p):
+def p_PARAMETERS(p):
     if(p[1] != None):
       p[0] = p[2]
     else:
       p[0] = p[1]
 
-  def p_FUNCTYPE(p):
+def p_FUNCTYPE(p):
     p[0] = p[1]
