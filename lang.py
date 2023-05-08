@@ -78,7 +78,7 @@ t_CTE_CHAR = ("\'[^\']\'")
 #ID
 def t_ID(t): 
     r"[a-zA-Z]([a-zA-Z]|[0-9]|[_])*"
-    t.type = reserved.get(t.value,'ID')
+    t.vtype = reserved.get(t.value,'ID')
     return t
 
 t_COLON = (":")
@@ -635,6 +635,64 @@ currentScope = None
 #Parametro evaluado
 funcAllCurr = None
 
+#Direcciones
+nINTS = 1000
+nFLOATS = 1000
+nCHARS = 1000
+nBOOLS = 1000
+nPOINTERS = 1000
+
+#Globales
+globInt = 1000
+globFloat = 2000
+globChar = 3000
+globBool = 4000
+
+#Locales
+locInt = 5000
+locFloat = 6000
+locChar = 7000
+locBool = 8000
+
+#Temporales
+tempInt = 9000
+tempFloat = 10000
+tempChar = 11000
+tempBool = 12000
+
+#Constantes
+constInt = 13000
+constFloat = 14000
+constChar = 15000
+constBool = 16000
+
+def virtualAdress(tableVar, adscope, nline):
+  global globInt
+  global globFloat
+  global globChar
+  global globBool
+
+  global locInt
+  global locFloat
+  global locChar
+  global locBool
+  global tempInt
+
+  global nINTS
+  global nFLOATS
+  global nCHARS
+  global nBOOLS
+
+  if (adscope == 'global'):
+    for k in tableVar.keys():
+      if ('dims' in tableVar[k].keys()):
+        increase = tableVar[k]['size']
+      else:
+        increase = 1
+      
+      #if (tableVar[k]['vtype'] == 'int'):
+        #if (nINTS < )
+
 #Sintaxis
 def p_PROGRAM(p):
 
@@ -656,7 +714,7 @@ def p_GLOBVAR(p):
   nChar = 0
   nBool = 0
 
-  dirFunc['global'] = {'type': 'void', 'parameters': None, 'tableVar': p[1], 'variables': {'int': nInt, 'float': nFloat, 'char': nChar, 'bool': nBool}}
+  dirFunc['global'] = {'vtype': 'void', 'parameters': None, 'tableVar': p[1], 'variables': {'int': nInt, 'float': nFloat, 'char': nChar, 'bool': nBool}}
 
 def p_STATEMENTS(p):
   if (p[1] == None):
@@ -692,13 +750,13 @@ def p_VAR(p):
 
   #Global scope
 
-  dirFunc['main'] = {'type': 'void', 'parameters': None, 'tableVar': p[1], 'variables': {'int': nInt, 'float': nFloat, 'char': nChar, 'bool': nBool}}
+  dirFunc['main'] = {'vtype': 'void', 'parameters': None, 'tableVar': p[1], 'variables': {'int': nInt, 'float': nFloat, 'char': nChar, 'bool': nBool}}
 
   p[0] = p[2]
 
 def p_ARRDECL(p):
   sizeArr = 0
-  array = {p[2]: {'type': p[1]}}
+  array = {p[2]: {'vtype': p[1]}}
   array[p[2]].update(p[3])
 
 def p_DIMONE(p):
@@ -735,9 +793,9 @@ def p_FUNCTION(p):
   global dirFunc
   global currentScope
 
-  funcInput = {p[p3]: {'type': p[2], 'parameters': {}, 'start': p[1]}}
+  funcInput = {p[p3]: {'vtype': p[2], 'parameters': {}, 'start': p[1]}}
   currentScope = p[3]
-  dirFunc.update({p[3]: {'type': p[2]}, 'parameters': {}})
+  dirFunc.update({p[3]: {'vtype': p[2]}, 'parameters': {}})
 
   tableVarLocal = {}
 
@@ -767,7 +825,7 @@ def p_FUNCPAR(p):
     p[0] = p[1]
 
 def p_PAR(p):
-    funcPar = {p[2]: {'type': p[1]}}
+    funcPar = {p[2]: {'vtype': p[1]}}
 
     #Revisa si el parametro es un arreglo
     if(p[3] != None): 
@@ -802,9 +860,9 @@ def p_ASSIGNATION(p):
   varType = None
   if p[2] == "-":
     if(p[1] in dirFunc[currentScope]['tableVar'].keys()):
-      varType = dirFunc[currentScope]['tableVar'][p[1]]['type']
+      varType = dirFunc[currentScope]['tableVar'][p[1]]['vtype']
     elif(p[1] in dirFunc['global']['tableVar'].keys()):
-      varType = dirFunc['global']['tableVar'][p[1]]['type']
+      varType = dirFunc['global']['tableVar'][p[1]]['vtype']
     else:
       print("Variable not defined")
     
@@ -834,5 +892,3 @@ def p_WHILE(p):
 def p_FOR(p):
   print('test')
 
-
-#print('prueba')
