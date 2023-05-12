@@ -16,3 +16,6 @@ Se agregaron las funciones de funciones y sus parametros
 Avance 4
 Se agregaron las variables locales, globales, temporales y constantes así como sus direcciones.
 Se cambio el nombre de los tipos de variable de type a vtype por un error que había
+
+Avance 5
+Se terminó la función para asignar las direcciones virtuales.

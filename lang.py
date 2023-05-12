@@ -635,6 +635,10 @@ currentScope = None
 #Parametro evaluado
 funcAllCurr = None
 
+#Cuadruplos
+cuadruplos = []
+nCuadruplos = 0
+
 #Direcciones
 nINTS = 1000
 nFLOATS = 1000
@@ -683,6 +687,11 @@ def virtualAdress(tableVar, adscope, nline):
   global nCHARS
   global nBOOLS
 
+  nInt = 0
+  nFloat = 0
+  nChar = 0
+  nBool = 0
+
   if (adscope == 'global'):
     for k in tableVar.keys():
       if ('dims' in tableVar[k].keys()):
@@ -690,8 +699,78 @@ def virtualAdress(tableVar, adscope, nline):
       else:
         increase = 1
       
-      #if (tableVar[k]['vtype'] == 'int'):
-        #if (nINTS < )
+      #Ints
+      if (tableVar[k]['vtype'] == 'int'):
+        if (nInt < nINTS):
+          tableVar[k]['address'] = globInt + nInt
+          nInt += increase
+        else:
+          print("Variable number limit was reached")
+
+      #Floats
+      elif (tableVar[k]['vtype'] == 'float'):
+        if (nFloat < nFLOATS):
+          tableVar[k]['address'] = globFloat + nFloat
+          nFloat += increase
+        else:
+          print("Variable number limit was reached")
+
+      #Chars
+      elif (tableVar[k]['vtype'] == 'char'):
+        if (nChar < nCHARS):
+          tableVar[k]['address'] = globChar + nChar
+          nChar += increase
+        else:
+          print("Variable number limit was reached")
+
+      #Bools
+      elif (tableVar[k]['vtype'] == 'bool'):
+        if (nBool < nBOOLS):
+          tableVar[k]['address'] = globBool + nBool
+          nBool += increase
+        else:
+          print("Variable number limit was reached")
+
+  elif (adscope == 'local'):
+    for k in tableVar.keys():
+      if ('dims' in tableVar[k].keys()):
+        increase = tableVar[k]['size']
+      else:
+        increase = 1
+      
+      #Ints
+      if (tableVar[k]['vtype'] == 'int'):
+        if (nInt < nINTS):
+          tableVar[k]['address'] = locInt + nInt
+          nInt += increase
+        else:
+          print("Variable number limit was reached")
+
+      #Floats
+      elif (tableVar[k]['vtype'] == 'float'):
+        if (nFloat < nFLOATS):
+          tableVar[k]['address'] = locFloat + nFloat
+          nFloat += increase
+        else:
+          print("Variable number limit was reached")
+
+      #Chars
+      elif (tableVar[k]['vtype'] == 'char'):
+        if (nChar < nCHARS):
+          tableVar[k]['address'] = locChar + nChar
+          nChar += increase
+        else:
+          print("Variable number limit was reached")
+
+      #Bools
+      elif (tableVar[k]['vtype'] == 'bool'):
+        if (nBool < nBOOLS):
+          tableVar[k]['address'] = locBool + nBool
+          nBool += increase
+        else:
+          print("Variable number limit was reached")
+
+
 
 #Sintaxis
 def p_PROGRAM(p):
