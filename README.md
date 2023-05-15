@@ -19,3 +19,5 @@ Se cambio el nombre de los tipos de variable de type a vtype por un error que ha
 
 Avance 5
 Se terminó la función para asignar las direcciones virtuales.
+Se empezó la implementación de cuadruplos.
+Se empezó la contabilización de variables.

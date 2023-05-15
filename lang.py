@@ -618,6 +618,7 @@ cuboSem = {
 pOper = ['?']       #Pila de operadores
 pilaOper = ['?']    #Pila de operandos
 pTipo = ['?']       #Pila de tipos
+pJumps = []
 
 #Precedencia
 precedence = (
@@ -638,6 +639,18 @@ funcAllCurr = None
 #Cuadruplos
 cuadruplos = []
 nCuadruplos = 0
+cuadLine = []
+
+#Numero de Variables
+nTempInt = 0
+nTempFloat = 0
+nTempChar = 0
+nTempBool = 0
+
+nGlobInt = 0
+nGlobFloat = 0
+nGlobChar = 0
+nGlobBool = 0
 
 #Direcciones
 nINTS = 1000
@@ -771,18 +784,42 @@ def virtualAdress(tableVar, adscope, nline):
           print("Variable number limit was reached")
 
 
-
 #Sintaxis
 def p_PROGRAM(p):
 
   global dirFunc
+  global cuadruplos
+  global nCuadruplos
 
   #Actualiza el directorio de funciones
   if(p[5] != None):
     dirFunc.update(p[5])
   
+  dirFunc[currentScope]['temp'] = {'int': nTempInt, 'float': nTempFloat, 'char': nTempChar, 'bool': nTempBool}
+  
 def p_PROG(p):
-  print(test)
+
+  global cuadruplos
+  global pJumps
+  global nCuadruplos
+  global cuadLine
+
+  #Main
+  cuadruplos.append(('GOTO', '', '')
+  cuadLine.append(p.lineno(1))
+  pJumps.append(nCuadruplos)
+  nCuadruplos += 1
+
+def GLOBVARDECL(p):
+
+  global currentScope
+  global p_FUNCDIR
+  global cuadruplos
+  global nCuadruplos
+  global pJumps
+
+  init = 
+
   
 def p_GLOBVAR(p):
   global dirFunc
